@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require "open-uri"
+require "nokogiri"
+require "uri"
+require "sqlite3"
+
+def parse_time(str)
+  year = str.slice(0..3).to_i
+  month = str.slice(4..5).to_i
+  day = str.slice(6..7).to_i
+  DateTime.new year, month, day
+end
+
+db_path = File.expand_path "../../tmp/cnet.db", __FILE__
+db = SQLite3::Database.new db_path
+
+url = "http://tokyo.craigslist.jp"
+top_page_html = Nokogiri::HTML(open(url))
+p url
+top_page_html.css("a").each do |top_el|
+  #next if top_el.attr("class") != "text"
+  
+  url = URI.join("http://tokyo.craigslist.jp/", top_el.attr("href"))
+  sub_page_html = Nokogiri::HTML(open(url))
+  p url
+  sub_page_html.css("a").each do |sub_el|
+    next if sub_el.attr("class") != "hdrlnk"
+
+    url = URI.join("http://tokyo.craigslist.jp/", sub_el.attr("href"))
+    article_page_html = Nokogiri::HTML(open(url))
+    title = article_page_html.css("h2")
+    p title[0]
+  end
+end
+
+
