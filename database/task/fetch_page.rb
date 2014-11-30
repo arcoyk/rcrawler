@@ -3,7 +3,7 @@ require "digest"
 require "fileutils"
 require "open-uri"
 require "resque"
-load File.expand_path "extract_page.rb", __FILE__
+load File.expand_path "../extract_page.rb", __FILE__
 
 class FetchPage
   @queue = :cnet_fetch
@@ -13,10 +13,12 @@ class FetchPage
     dir = File.expand_path "../tmp/pages", __FILE__
     FileUtils.mkdir_p dir
     path = File.join dir, "#{url_hash}.html"
+    puts "fetched as : #{url_hash}.html"
 
     data = open(url).read
     open(path, "w") do |f|
       f.write(data)
+      puts "extracting : #{url.to_s}"
       Resque.enqueue ExtractPage, url
     end
   end
