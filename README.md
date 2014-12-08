@@ -25,3 +25,17 @@ brew install redis
 (not gem)
 
 redis-server
+
+4. no Rakefile
+make it own:
+load -
+load -
+require -
+
+then
+
+5. How to start crawling
+
+radis-server (start server)
+$ PIDFILE=./resque-extract.pid BACKGROUND=yes QUEUE=cnet_extract rake resque:work
+$ PIDFILE=./resque-fetch.pid INTERVAL=5 BACKGROUND=yes QUEUE=cnet_fetch rake resque:work
