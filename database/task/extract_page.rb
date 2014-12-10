@@ -7,17 +7,20 @@ class ExtractPage
   def self.perform(url)
     url_hash = Digest::SHA256.hexdigest url.to_s
 
-    path = File.expand_path "../tmp/pages/#{url_hash}.html", __FILE__
+    path = "/users/kitayui/project/rcrawler/tmp/pages/#{url_hash}.html"
     doc = Nokogiri::HTML open(path)
 
-    body = doc.css("#postingbody")
-    put "extracted : #{body}"
+    body = doc.css("#postingbody").inner_text
+    if (body == nil)
+      puts "nil"
+    end
+    puts "extracting : #{body}"
 
-    db_path = File.expand_path "../tmp/cnet.db", __FILE__
+    db_path = "/users/kitayui/project/rcrawler/tmp/cnet.db"
     db = SQLite3::Database.new db_path
     db.execute(
-      "UPDATE pages SET published_at = ?, body = ? WHERE url = ?",
-      uil, body, url
+      "UPDATE pages SET body = ? WHERE url = ?",
+      body, url
     )
   end
 end
