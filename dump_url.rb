@@ -3,7 +3,12 @@ require "nokogiri"
 require "uri"
 require "sqlite3"
 
-def recursive_crawler(url)
+def recursive_crawler(url, cnt)
+  cnt += 1
+  if cnt > 10
+    return
+  end
+  puts cnt
   puts "START : " + url
   begin
     html = Nokogiri::HTML(open(url, :redirect => false))
@@ -18,7 +23,7 @@ def recursive_crawler(url)
     end
     if $db.execute("SELECT * FROM visited WHERE url=?", new_url.to_s).length == 0
       puts "FIND : " + new_url
-      recursive_crawler(new_url);
+      recursive_crawler(new_url, cnt);
     end
   end
   return
@@ -26,7 +31,7 @@ end
 
 $db = SQLite3::Database.new "recipe.db"
 $site_root = "http://allrecipes.com/"
-recursive_crawler($site_root)
+recursive_crawler($site_root, 1)
 
 
 
