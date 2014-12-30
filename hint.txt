@@ -1,0 +1,27 @@
+
+1. Cannot fetch pages from CNET.com
+There was an error on fetching URL of cnet.com, simply because the website has been updated. So, changed targed to http://sfbay.craigslist.org/sfc/ craigslist.
+
+2. "require "resque"" -> "resque" not found
+gem install resque
+
+3. radis connection error
+brew update
+brew install redis
+(not gem)
+
+4. Create Rakefile
+make it own:
+load (file)
+load (file)
+require "resque/tasks"
+
+
+5. Start task queing to redis using resque
+
+radis-server -> (start server)
+PIDFILE=./resque-extract.pid BACKGROUND=yes QUEUE=recipe_extract rake resque:work
+PIDFILE=./resque-fetch.pid BACKGROUND=yes QUEUE=recipe_fetch rake resque:work
+
+Don't know how to build task 'resque:work' -> add require 'resque/tasks' to Rakefile
+
