@@ -8,6 +8,6 @@ db.execute(
   "select url from visited where url like 'http://allrecipes.com/recipe/%' "
 ).each do |row|
   url = row[0].split('/').slice(0...5).join('/')
-  puts "fetching : #{url.to_s}"
+  puts "queing : #{url.to_s}"
   Resque.enqueue FetchPage, url
 end
