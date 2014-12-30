@@ -10,7 +10,7 @@ class FetchPage
   def self.perform(url)
     url_hash = Digest::SHA256.hexdigest url.to_s
 
-    path = "/users/kitayui/project/rcrawler/tmp/pages/#{url_hash}.html"
+    path = "/users/kitayui/project/rcrawler/tmp/recipe_pages/#{url_hash}.html"
     puts "fetching : #{path}"
 
     data = open(url).read

@@ -1,0 +1,2 @@
+load "./fetch_page.rb"
+load "./extract_page.rb"
