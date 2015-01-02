@@ -2,23 +2,22 @@ require "digest"
 require "nokogiri"
 require "sqlite3"
 
+db = SQLite3::Database.new "../recipe.db"
 pages = Dir.glob("../pages/*")
 pages.each do |path|
     doc = Nokogiri::HTML open(path)
-    title = doc.css('#itemTitle')
+    title = doc.css("#itemTitle").inner_text
     span_array = doc.css('span')
     ingredients = "";
     span_array.each do |span|
-      if span.id == "lblIngName"
-        ingredients += " &&&& " + span.innerText
+      if span.attr("id") == 'lblIngName'
+        ingredients += " &&&& " + span.inner_text
       end
     end
     puts title
     puts ingredients
-
-    db = SQLite3::Database.new "../recipe.db"
     db.execute(
-      "UPDATE recipes SET title = ?, ingredients = ?, url = ? WHERE url = ?",
-      title, ingredients, url, url
+      "INSERT OR IGNORE INTO recipes VALUES(?, ?, ?)",
+      path, title, ingredients
     )
 end
