@@ -10,7 +10,7 @@ class FetchPage
   def self.perform(url)
     url_hash = Digest::SHA256.hexdigest url.to_s
 
-    local_path = "./pages/#{url_hash}.html"
+    local_path = "../pages/#{url_hash}.html"
     puts "fetching : #{url.to_s}"
 
     html = open(url).read
