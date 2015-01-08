@@ -10,18 +10,23 @@ brew update
 brew install redis
 (not gem)
 
-4. Create Rakefile
+4. create Rakefile
 make it own:
 load (file)
 load (file)
 require "resque/tasks"
 
 
-5. Start task queing to redis using resque
-
+5. start task queing to redis using resque
 radis-server -> (start server)
 PIDFILE=./resque-extract.pid BACKGROUND=yes QUEUE=recipe_extract rake resque:work
 PIDFILE=./resque-fetch.pid BACKGROUND=yes QUEUE=recipe_fetch rake resque:work
 
 Don't know how to build task 'resque:work' -> add require 'resque/tasks' to Rakefile
 
+----
+
+6. intall gems
+rbcluster : https://github.com/jarib/rbcluster/blob/master/examples/simple_kcluster.rb
+engtagger : https://github.com/yohasebe/engtagger/blob/master/test/test_engtagger.rb
+levenshtein : http://shokai.org/blog/archives/tag/levenshtein-distances
