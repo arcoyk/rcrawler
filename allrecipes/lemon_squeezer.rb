@@ -11,25 +11,18 @@ ing_lists.each do |ing_list|
 			ing.delete!(',')
 			ing.delete!(';')
 			ing.delete!('*')
+			ing.strip!
 			ing.downcase!
-			puts ing
-			ing.split(" ").each do |word|
-				words.push word
+			if ing.length > 3
+				words.push ing
 			end
 		end
 	end
 end
 
 words.sort! do |w1, w2|
-	# words.count(w1) <=> words.count(w2)
+	words.count(w1) <=> words.count(w2)
 end
+words.uniq!
 
-words.uniq!.reverse!
-
-tgr = EngTagger.new
-
-words.each do |word|
-	if tgr.get_nouns(tgr.add_tags(word)).length > 0
-		# puts word
-	end
-end
+puts words

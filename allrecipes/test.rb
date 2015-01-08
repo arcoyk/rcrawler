@@ -1,12 +1,13 @@
-require "resque"
-require "sqlite3"
+require 'RMagick'
+include Magick
 
-db = SQLite3::Database.new "./recipe.db"
+image = ImageList.new("test.png")
+image2 = Image.new(image.columns, image.rows)
 
-db.execute(
-  "select url from visited where url like 'http://allrecipes.com/recipe/%' "
-).each do |row|
-  url = row[0].split('/').slice(0...5).join('/')
-  puts "fetching : #{url.to_s}"
-  Resque.enqueue FetchPage, url
+(0..image.columns).each do |x|
+    (0..image.rows).each do |y|
+        pixel = image3.pixel_color(x, y)
+        pixel.blue = 0
+	    image2.pixel_color(x, y, pixel)
+    end
 end
