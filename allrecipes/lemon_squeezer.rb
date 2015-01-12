@@ -12,12 +12,29 @@ def linkval ing1, ing2
 	return $link_map[$list_hash[ing1]][$list_hash[ing2]]
 end
 
-=begin
-
 db = SQLite3::Database.new "recipe.db"
 ing_lists = db.execute("SELECT ingredients FROM recipes")
-p ing_lists
+recipes = []
+ing_lists.each do |ing_list|
+	ings = []
+	ing_list.last.split("&&&&").each do |ing|
+		ing.delete!(',')
+		ing.delete!(';')
+		ing.delete!('*')
+		ing.strip!
+		ing.downcase!
+		if ing.length > 3
+			ings.push ing
+		end
+	end
+	recipes.push ings
+end
 
+ing_list = recipes.flatten
+
+p ing_list
+
+=begin
 words = []
 ing_lists.each do |ing_list|
 	ing_list.each do |ings|
@@ -41,6 +58,7 @@ words.uniq!
 =end
 
 # init example
+=begin
 s = "some"
 c = "cone"
 t = "tall"
@@ -64,7 +82,11 @@ length.times do
 	column = Array.new(length, 0)
 	$link_map.push(column)
 end
+=end
 
+
+
+=begin
 # create map
 $list.each do |item|
 	recipes.each do |ings|
@@ -108,4 +130,4 @@ show_map link_summary
 result = Dijkstra.new(1, 3, link_summary)
 p result.getShortestPath()
 p result.getCost()
-
+=end
