@@ -13,7 +13,7 @@ def linkval ing1, ing2
 end
 
 db = SQLite3::Database.new "recipe.db"
-ing_lists = db.execute("SELECT ingredients FROM recipes")
+ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 10")
 recipes = []
 ing_lists.each do |ing_list|
 	ings = []
@@ -30,63 +30,31 @@ ing_lists.each do |ing_list|
 	recipes.push ings
 end
 
-ing_list = recipes.flatten
-
-p ing_list
-
-=begin
-words = []
-ing_lists.each do |ing_list|
-	ing_list.each do |ings|
-		ings.split("&&&&").each do |ing|
-			ing.delete!(',')
-			ing.delete!(';')
-			ing.delete!('*')
-			ing.strip!
-			ing.downcase!
-			if ing.length > 3
-				words.push ing
-			end
-		end
-	end
+$list = recipes.flatten
+$list.sort! do |ing1, ing2|
+	$list.count(ing1) <=> $list.count(ing2)
 end
+$list.uniq!.reverse!
 
-words.sort! do |w1, w2|
-	words.count(w1) <=> words.count(w2)
-end
-words.uniq!
-=end
+puts $list
 
-# init example
-=begin
-s = "some"
-c = "cone"
-t = "tall"
-h = "shade"
-recipes = [[s, c],
-		   [c, t],
-		   [t, h],
-		   [h]]
-$list = [s, c, t, h]
 length = $list.length
-list_index = []
-length.times do |index|
-	list_index.push(index)
-end
-alist = $list.zip(list_index)
-$list_hash = Hash[alist]
+p length
 
 # init map
 $link_map = []
 length.times do
 	column = Array.new(length, 0)
-	$link_map.push(column)
+	$link_map.push column
 end
-=end
+$list_hash = {}
+list_index = []
+length.times do |index|
+	list_index.push index
+end
+alist = $list.zip(list_index)
+$list_hash = Hash[alist]
 
-
-
-=begin
 # create map
 $list.each do |item|
 	recipes.each do |ings|
@@ -94,13 +62,14 @@ $list.each do |item|
 			ings.each do |ing|
 				item_id = $list_hash[item]
 				ing_id = $list_hash[ing]
-				$link_map[item_id][ing_id] += 2
+				$link_map[item_id][ing_id] += 1
 			end
 		end
 	end
 end
 
 # fold map
+puts "folding"
 length.times do |row|
 	length.times do |col|
 		$link_map[col][row] *= 2
@@ -110,9 +79,7 @@ length.times do |row|
 	end
 end
 
-show_map $link_map
-
-# dijkstra test
+# find shortest path
 link_summary = []
 length.times do |row|
 	length.times do |col|
@@ -124,10 +91,11 @@ length.times do |row|
 end
 
 link_summary.unshift [link_summary.length]
-
-show_map link_summary
-
-result = Dijkstra.new(1, 3, link_summary)
-p result.getShortestPath()
-p result.getCost()
-=end
+puts "searching shortest path"
+result = Dijkstra.new(1, 5, link_summary)
+path = result.getShortestPath()
+puts $list[1]
+puts $list[5]
+path.each do |index|
+	p $list[index]
+end
