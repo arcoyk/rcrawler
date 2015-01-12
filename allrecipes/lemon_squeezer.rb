@@ -14,11 +14,13 @@ end
 
 db = SQLite3::Database.new "recipe.db"
 ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 10")
+=begin
 ing_lists = [["butter &&&& bean &&&& tomato"],
 			["butter &&&& orange &&&& chocolate &&&& sugar"],
 			["sugar &&&& bean"],
 			["sugar &&&& orange &&&& butter"],
 			["olive oil &&&& tomato &&&& pasta"]]
+=end
 recipes = []
 ing_lists.each do |ing_list|
 	ings = []
