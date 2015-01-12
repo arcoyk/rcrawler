@@ -1,10 +1,23 @@
 require "sqlite3"
+require "pp"
 
+def show_map map
+	puts
+	map.each do |col|
+		puts col.join(" ")
+	end
+end
 
+def linkval ing1, ing2
+	return $link_map[$list_hash[ing1]][$list_hash[ing2]]
+end
+
+=begin
 
 db = SQLite3::Database.new "recipe.db"
 ing_lists = db.execute("SELECT ingredients FROM recipes")
-=begin
+p ing_lists
+
 words = []
 ing_lists.each do |ing_list|
 	ing_list.each do |ings|
@@ -27,30 +40,55 @@ end
 words.uniq!
 =end
 
-=begin
-db.execute("DROP TABLE link_map")
-
+# init example
 s = "some"
 c = "cone"
 t = "tall"
 h = "shade"
-
 recipes = [[s, c, t, h],
 		   [s, c],
 		   [t, h],
 		   [t, c]]
+$list = [s, c, t, h]
+length = $list.length
+list_index = []
+length.times do |index|
+	list_index.push(index)
+end
+alist = $list.zip(list_index)
+$list_hash = Hash[alist]
 
-list = ["some", "cone","tall", "shade"]
+# init map
+$link_map = []
+length.times do
+	column = Array.new(length, 0)
+	$link_map.push(column)
+end
 
-query = "CREATE TABLE link_map ("
-list.each do |item|
-	query += item + " int"
-	if item != list.last
-		query += ", "
+# create map
+$list.each do |item|
+	recipes.each do |ings|
+		if ings.include? item
+			ings.each do |ing|
+				item_id = $list_hash[item]
+				ing_id = $list_hash[ing]
+				$link_map[item_id][ing_id] += 2
+			end
+		end
 	end
 end
-query += ")"
-db.execute(query)
-=end
+
+show_map $link_map
+
+# fold map
+length.times do |row|
+	length.times do |col|
+		$link_map[col][row] *= 2
+		if col == row
+			$link_map[col][row] = 0
+		end
+	end
+end
+
 
 
