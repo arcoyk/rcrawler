@@ -19,7 +19,7 @@ ing_lists = [["butter &&&& bean &&&& tomato"],
 			["butter &&&& orange &&&& chocolate &&&& sugar"],
 			["sugar &&&& bean"],
 			["sugar &&&& orange &&&& butter"],
-			["olive oil &&&& tomato &&&& pasta"]]
+			["olive oil &&&& tomato &&&& pasta &&&& butter &&&& sugar &&&& sugar"]]
 =end
 recipes = []
 ing_lists.each do |ing_list|
@@ -45,6 +45,10 @@ $list.sort! do |ing1, ing2|
 	$list.count(ing1) <=> $list.count(ing2)
 end
 $list.uniq!.reverse!
+
+recipes.each do |recipe|
+	recipe.uniq!
+end
 
 length = $list.length
 p length
@@ -76,7 +80,6 @@ $list.each do |item|
 	end
 end
 
-
 # zero
 length.times do |row|
 	length.times do |col|
@@ -86,7 +89,17 @@ length.times do |row|
 	end
 end
 
+length.times do |row|
+	length.times do |col|
+		if $link_map[col][row] != $link_map[row][col]
+			$link_map[col][row] = 'x'
+			$link_map[row][col] = 'x'
+		end
+	end
+end
+
 show_map $link_map
+
 
 # find shortest path
 link_summary = []
@@ -102,18 +115,22 @@ end
 
 link_summary.unshift [link_summary.length]
 puts "searching shortest path"
-result = Dijkstra.new(2, 4, link_summary)
-path = result.getShortestPath()
-path.each do |index|
-	p $list[index]
+
+$distance_map = []
+length.times do
+	column = Array.new(length, 0)
+	$distance_map.push column
 end
-p path
-p result.getCost()
-result = Dijkstra.new(4, 2, link_summary)
-path = result.getShortestPath()
-path.each do |index|
-	p $list[index]
+
+length.times do |row|
+	length.times do |col|
+		result = Dijkstra.new(row, col, link_summary)
+		$distance_map[col][row] = result.getCost()
+		p col
+	end
+	p row
 end
-p path
-p result.getCost()
+
+show_map distance_map
+
 
