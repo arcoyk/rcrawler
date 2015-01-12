@@ -1,5 +1,5 @@
 require "sqlite3"
-require "pp"
+require "dijkstra"
 
 def show_map map
 	puts
@@ -45,10 +45,10 @@ s = "some"
 c = "cone"
 t = "tall"
 h = "shade"
-recipes = [[s, c, t, h],
-		   [s, c],
+recipes = [[s, c],
+		   [c, t],
 		   [t, h],
-		   [t, c]]
+		   [h]]
 $list = [s, c, t, h]
 length = $list.length
 list_index = []
@@ -78,8 +78,6 @@ $list.each do |item|
 	end
 end
 
-show_map $link_map
-
 # fold map
 length.times do |row|
 	length.times do |col|
@@ -90,5 +88,24 @@ length.times do |row|
 	end
 end
 
+show_map $link_map
 
+# dijkstra test
+link_summary = []
+length.times do |row|
+	length.times do |col|
+		val = $link_map[col][row]
+		if val != 0
+			link_summary.push [col, row, val]
+		end
+	end
+end
+
+link_summary.unshift [link_summary.length]
+
+show_map link_summary
+
+result = Dijkstra.new(1, 3, link_summary)
+p result.getShortestPath()
+p result.getCost()
 
