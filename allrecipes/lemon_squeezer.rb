@@ -17,7 +17,7 @@ ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 10")
 =begin
 ing_lists = [["butter &&&& bean &&&& tomato"],
 			["butter &&&& orange &&&& chocolate &&&& sugar"],
-			["sugar &&&& bean"],
+			["sugar &&&& bean"]]
 			["sugar &&&& orange &&&& butter"],
 			["olive oil &&&& tomato &&&& pasta &&&& butter &&&& sugar &&&& sugar"]]
 =end
@@ -37,8 +37,6 @@ ing_lists.each do |ing_list|
 	end
 	recipes.push ings
 end
-
-p recipes
 
 $list = recipes.flatten
 $list.sort! do |ing1, ing2|
@@ -80,11 +78,20 @@ $list.each do |item|
 	end
 end
 
-# zero
+# fix link map
 length.times do |row|
 	length.times do |col|
 		if col == row
 			$link_map[col][row] = 0
+		end
+	end
+end
+max_val = $link_map.flatten.max
+
+length.times do |row|
+	length.times do |col|
+		if $link_map[col][row] != 0
+			$link_map[col][row] = (max_val + 1) - $link_map[col][row]
 		end
 	end
 end
@@ -98,17 +105,22 @@ length.times do |row|
 	end
 end
 
+$list.each_with_index do |item, id|
+	p "#{id} #{item}"
+end
 show_map $link_map
 
 
 # find shortest path
+# gem dijkstra requires node.id != 0, so shift index
 link_summary = []
-max_val = $link_map.flatten.max
 length.times do |row|
+	shift_row = row + 1
 	length.times do |col|
+		shift_col = col + 1
 		val = $link_map[col][row]
 		if val != 0
-			link_summary.push [col, row, max_val - val]
+			link_summary.push [shift_col, shift_row, val]
 		end
 	end
 end
@@ -116,12 +128,30 @@ end
 link_summary.unshift [link_summary.length]
 puts "searching shortest path"
 
+r = Random.new(10)
+10.times do
+	index1 = r.rand(length)
+	index2 = r.rand(length)
+	shift_index1 = index1 + 1
+	shift_index2 = index2 + 1
+    p $list[index1]
+	p $list[index2]
+	rst1 = Dijkstra.new(shift_index1, shift_index2, link_summary)
+	rst2 = Dijkstra.new(shift_index2, shift_index1, link_summary)
+	if rst1.getCost() != rst2.getCost()
+		p "#{rst1.getShortestPath()} #{rst1.getCost()}"
+		p "#{rst2.getShortestPath()} #{rst2.getCost()}"
+	end
+end
+
+# path cost cash
 $distance_map = []
 length.times do
 	column = Array.new(length, 0)
 	$distance_map.push column
 end
 
+=begin
 length.times do |row|
 	length.times do |col|
 		result = Dijkstra.new(row, col, link_summary)
@@ -130,7 +160,4 @@ length.times do |row|
 	end
 	p row
 end
-
-show_map distance_map
-
-
+=end
