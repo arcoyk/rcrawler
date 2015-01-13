@@ -126,23 +126,6 @@ length.times do |row|
 end
 
 link_summary.unshift [link_summary.length]
-puts "searching shortest path"
-
-r = Random.new(10)
-10.times do
-	index1 = r.rand(length)
-	index2 = r.rand(length)
-	shift_index1 = index1 + 1
-	shift_index2 = index2 + 1
-    p $list[index1]
-	p $list[index2]
-	rst1 = Dijkstra.new(shift_index1, shift_index2, link_summary)
-	rst2 = Dijkstra.new(shift_index2, shift_index1, link_summary)
-	if rst1.getCost() != rst2.getCost()
-		p "#{rst1.getShortestPath()} #{rst1.getCost()}"
-		p "#{rst2.getShortestPath()} #{rst2.getCost()}"
-	end
-end
 
 # path cost cash
 $distance_map = []
@@ -151,13 +134,20 @@ length.times do
 	$distance_map.push column
 end
 
-=begin
+r = Random.new
 length.times do |row|
 	length.times do |col|
-		result = Dijkstra.new(row, col, link_summary)
+		row = r.rand(length)
+		col = r.rand(length)
+		shift_row = row + 1
+		shift_col = col + 1
+		result = Dijkstra.new(shift_row, shift_col, link_summary)
 		$distance_map[col][row] = result.getCost()
-		p col
+		p "#{$list[row]} -> #{$list[col]} : #{result.getCost()}"
+		result.getShortestPath().each do |index|
+			shift_index = index - 1
+			print "#{$list[shift_index]} - "
+		end
+		puts ""
 	end
-	p row
 end
-=end
