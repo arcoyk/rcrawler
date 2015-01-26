@@ -13,7 +13,7 @@ def linkval ing1, ing2
 end
 
 db = SQLite3::Database.new "recipe.db"
-ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 10")
+ing_lists = db.execute("SELECT ingredients FROM recipes")
 =begin
 ing_lists = [["butter &&&& bean &&&& tomato"],
 			["butter &&&& orange &&&& chocolate &&&& sugar"],
@@ -38,7 +38,6 @@ ing_lists.each do |ing_list|
 	recipes.push ings
 end
 
-p recipes
 
 $list = recipes.flatten
 $list.sort! do |ing1, ing2|
@@ -51,7 +50,6 @@ recipes.each do |recipe|
 end
 
 length = $list.length
-p length
 
 # init map
 $link_map = []
@@ -98,9 +96,6 @@ length.times do |row|
 	end
 end
 
-show_map $link_map
-
-
 # find shortest path
 link_summary = []
 max_val = $link_map.flatten.max
@@ -114,7 +109,6 @@ length.times do |row|
 end
 
 link_summary.unshift [link_summary.length]
-puts "searching shortest path"
 
 $distance_map = []
 length.times do
@@ -126,11 +120,7 @@ length.times do |row|
 	length.times do |col|
 		result = Dijkstra.new(row, col, link_summary)
 		$distance_map[col][row] = result.getCost()
-		p col
 	end
-	p row
 end
 
-show_map distance_map
-
-
+show_map $distance_map
