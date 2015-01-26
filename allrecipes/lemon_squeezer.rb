@@ -13,7 +13,7 @@ def linkval ing1, ing2
 end
 
 db = SQLite3::Database.new "recipe.db"
-ing_lists = db.execute("SELECT ingredients FROM recipes")
+ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 8")
 =begin
 ing_lists = [["butter &&&& bean &&&& tomato"],
 			["butter &&&& orange &&&& chocolate &&&& sugar"],
@@ -120,6 +120,7 @@ length.times do |row|
 	length.times do |col|
 		result = Dijkstra.new(row, col, link_summary)
 		$distance_map[col][row] = result.getCost()
+		puts result.getCost()
 	end
 end
 
