@@ -1,0 +1,3 @@
+[submodule "allrecipes/dijkstra"]
+	path = allrecipes/dijkstra
+	url = git@github.com:gmiklaszewski/dijkstra.git

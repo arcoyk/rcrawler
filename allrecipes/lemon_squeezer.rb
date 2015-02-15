@@ -13,14 +13,12 @@ def linkval ing1, ing2
 end
 
 db = SQLite3::Database.new "recipe.db"
-ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 8")
-=begin
+# ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 5")
 ing_lists = [["butter &&&& bean &&&& tomato"],
 			["butter &&&& orange &&&& chocolate &&&& sugar"],
 			["sugar &&&& bean"],
 			["sugar &&&& orange &&&& butter"],
 			["olive oil &&&& tomato &&&& pasta &&&& butter &&&& sugar &&&& sugar"]]
-=end
 recipes = []
 ing_lists.each do |ing_list|
 	ings = []
@@ -78,15 +76,16 @@ $list.each do |item|
 	end
 end
 
-# zero
+# diagonal zero
 length.times do |row|
 	length.times do |col|
 		if col == row
-			$link_map[col][row] = 0
+			$link_map[row][col] = 0
 		end
 	end
 end
 
+# error check
 length.times do |row|
 	length.times do |col|
 		if $link_map[col][row] != $link_map[row][col]
@@ -96,19 +95,23 @@ length.times do |row|
 	end
 end
 
+show_map $link_map
+
 # find shortest path
 link_summary = []
 max_val = $link_map.flatten.max
 length.times do |row|
 	length.times do |col|
-		val = $link_map[col][row]
+		val = $link_map[row][col]
 		if val != 0
-			link_summary.push [col, row, max_val - val]
+			link_summary.push [row, col, max_val - val]
 		end
 	end
 end
 
 link_summary.unshift [link_summary.length]
+
+puts link_summary.inspect
 
 $distance_map = []
 length.times do
@@ -119,9 +122,9 @@ end
 length.times do |row|
 	length.times do |col|
 		result = Dijkstra.new(row, col, link_summary)
-		$distance_map[col][row] = result.getCost()
-		puts result.getCost()
+		$distance_map[row][col] = result.getCost()
 	end
+	print "."
 end
 
 show_map $distance_map
