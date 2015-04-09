@@ -14,11 +14,8 @@ end
 
 db = SQLite3::Database.new "recipe.db"
 # ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 5")
-ing_lists = [["butter &&&& bean &&&& tomato"],
-			["butter &&&& orange &&&& chocolate &&&& sugar"],
-			["sugar &&&& bean"],
-			["sugar &&&& orange &&&& butter"],
-			["olive oil &&&& tomato &&&& pasta &&&& butter &&&& sugar &&&& sugar"]]
+ing_lists = [["butter &&&& bean"],
+			["butter &&&& orange"]]
 recipes = []
 ing_lists.each do |ing_list|
 	ings = []
@@ -49,7 +46,7 @@ end
 
 length = $list.length
 
-# init map
+# init which ing with which ing map
 $link_map = []
 length.times do
 	column = Array.new(length, 0)
@@ -63,7 +60,7 @@ end
 alist = $list.zip(list_index)
 $list_hash = Hash[alist]
 
-# create map
+# create which ing with which ing map
 $list.each do |item|
 	recipes.each do |ings|
 		if ings.include? item
@@ -104,12 +101,12 @@ length.times do |row|
 	length.times do |col|
 		val = $link_map[row][col]
 		if val != 0
-			link_summary.push [row, col, max_val - val]
+			link_summary.push [row, col, max_val - val + 1]
 		end
 	end
 end
 
-link_summary.unshift [link_summary.length]
+link_summary.unshift [$list.length]
 
 puts link_summary.inspect
 
@@ -128,3 +125,7 @@ length.times do |row|
 end
 
 show_map $distance_map
+
+puts "........."
+
+puts $list_hash

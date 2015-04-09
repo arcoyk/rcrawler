@@ -1,0 +1,51 @@
+2015.01.08
+
+Item clustering in Ganeza paring algorithm seems necessary because some items are too specific that they seems not share any group. 
+
+Ingredient clustering exmaple:
+Raw ingredients from recipe:
+reynolds wrap® non-stick foil 
+fish fillets fresh or thawed 
+butter melted 
+salt 
+cayenne pepper or to taste 
+pecan coating: 
+finely chopped pecans 
+shredded coconut 
+plain dry bread crumbs 
+pineapple mango salsa: 
+pineapple tidbits drained 
+mango diced 
+red bell pepper diced 
+green onions chopped 
+red wine vinegar 
+chopped cilantro 
+salt
+...
+
+Devied into words then sorted by frequency:
+sugar
+butter
+salt
+flour
+chocolate
+extract <- x
+vanilla
+ground
+powder
+chips
+cream
+cheese
+pepper
+eggs
+milk
+taste
+egg
+sliced <- x
+soda
+water
+oil
+garlic
+onion
+unsweetened <- x
+...
