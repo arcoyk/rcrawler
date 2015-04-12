@@ -13,9 +13,9 @@ def linkval ing1, ing2
 end
 
 db = SQLite3::Database.new "recipe.db"
-# ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 5")
-ing_lists = [["butter &&&& bean"],
-			["butter &&&& orange"]]
+ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 5")
+# ing_lists = [["butter &&&& bean"],
+# 			["butter &&&& orange"]]
 recipes = []
 ing_lists.each do |ing_list|
 	ings = []
@@ -92,40 +92,50 @@ length.times do |row|
 	end
 end
 
+# print for python networkx input
+puts $list
 show_map $link_map
-
-# find shortest path
-link_summary = []
-max_val = $link_map.flatten.max
-length.times do |row|
-	length.times do |col|
-		val = $link_map[row][col]
-		if val != 0
-			link_summary.push [row, col, max_val - val + 1]
-		end
+for row in 0..length-1
+	for col in row+1..length-1
+		print $link_map[row][col]
+		print ' '
 	end
+	puts
 end
 
-link_summary.unshift [$list.length]
 
-puts link_summary.inspect
+# # find shortest path
+# link_summary = []
+# max_val = $link_map.flatten.max
+# length.times do |row|
+# 	length.times do |col|
+# 		val = $link_map[row][col]
+# 		if val != 0
+# 			link_summary.push [row, col, max_val - val + 1]
+# 		end
+# 	end
+# end
 
-$distance_map = []
-length.times do
-	column = Array.new(length, 0)
-	$distance_map.push column
-end
+# link_summary.unshift [$list.length]
 
-length.times do |row|
-	length.times do |col|
-		result = Dijkstra.new(row, col, link_summary)
-		$distance_map[row][col] = result.getCost()
-	end
-	print "."
-end
+# puts link_summary.inspect
 
-show_map $distance_map
+# $distance_map = []
+# length.times do
+# 	column = Array.new(length, 0)
+# 	$distance_map.push column
+# end
 
-puts "........."
+# length.times do |row|
+# 	length.times do |col|
+# 		result = Dijkstra.new(row, col, link_summary)
+# 		$distance_map[row][col] = result.getCost()
+# 	end
+# 	print "."
+# end
 
-puts $list_hash
+# show_map $distance_map
+
+# puts "........."
+
+# puts $list_hash
