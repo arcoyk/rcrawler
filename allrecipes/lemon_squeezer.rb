@@ -93,15 +93,20 @@ length.times do |row|
 end
 
 # print for python networkx input
+# G.add_edge('A', 'B', weight=5)
+# G.add_edge('B', 'C', weight=3)
+# G.add_edge('A', 'D', weight=1)
 puts $list
 show_map $link_map
 for row in 0..length-1
+	row_ing = $list[row]
 	for col in row+1..length-1
-		print $link_map[row][col]
-		print ' '
+		col_ing = $list[col]
+		weight = $link_map[row][col]
+		puts "G.add_edge('#{row_ing}', '#{col_ing}', weight=#{weight})"
 	end
-	puts
 end
+
 
 
 # # find shortest path
