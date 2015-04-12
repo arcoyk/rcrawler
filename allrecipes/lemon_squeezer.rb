@@ -96,8 +96,10 @@ end
 # G.add_edge('A', 'B', weight=5)
 # G.add_edge('B', 'C', weight=3)
 # G.add_edge('A', 'D', weight=1)
-puts $list
-show_map $link_map
+print <<EOS
+import networkx as nx
+G = nx.Graph()
+EOS
 for row in 0..length-1
 	row_ing = $list[row]
 	for col in row+1..length-1
@@ -106,7 +108,10 @@ for row in 0..length-1
 		puts "G.add_edge('#{row_ing}', '#{col_ing}', weight=#{weight})"
 	end
 end
-
+print <<EOS
+sp_mat = nx.all_pairs_dijkstra_path_length(G, cutoff=None, weight='weight')
+print sp_mat
+EOS
 
 
 # # find shortest path
