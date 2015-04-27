@@ -13,9 +13,10 @@ def linkval ing1, ing2
 end
 
 db = SQLite3::Database.new "recipe.db"
-ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 5")
+ing_lists = db.execute("SELECT ingredients FROM recipes")
 # ing_lists = [["butter &&&& bean"],
-# 			["butter &&&& orange"]]
+#  			["butter &&&& orange"],
+#  			["butter &&&& orange &&&& cream"]]
 recipes = []
 ing_lists.each do |ing_list|
 	ings = []
@@ -92,26 +93,31 @@ length.times do |row|
 	end
 end
 
-# print for python networkx input
-# G.add_edge('A', 'B', weight=5)
-# G.add_edge('B', 'C', weight=3)
-# G.add_edge('A', 'D', weight=1)
-print <<EOS
+python_code = " # -*- coding: utf-8 -*- \n"
+
+python_code += <<EOS
 import networkx as nx
 G = nx.Graph()
 EOS
+
 for row in 0..length-1
 	row_ing = $list[row]
-	for col in row+1..length-1
+	for col in 0..length-1
 		col_ing = $list[col]
 		weight = $link_map[row][col]
-		puts "G.add_edge('#{row_ing}', '#{col_ing}', weight=#{weight})"
+		if weight == 0
+			next
+		end
+		str = 'G.add_edge("' + row_ing + '","' + col_ing + '",' + "weight=" + weight.to_s + ")"
+		python_code += str + "\n"
 	end
 end
-print <<EOS
+python_code += <<EOS
 sp_mat = nx.all_pairs_dijkstra_path_length(G, cutoff=None, weight='weight')
 print sp_mat
 EOS
+
+puts python_code
 
 
 # # find shortest path

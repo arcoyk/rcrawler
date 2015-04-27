@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <script type="text/javascript" src="parings.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Dinosaur', 'Length'],
+          ['Apatosaurus (deceptive lizard)', 22.9],
+          ['Archaeopteryx (ancient wing)', 0.9],
+          ['Argentinosaurus (Argentina lizard)', 36.6],
+          ['Baryonyx (heavy claws)', 9.1],
+          ['Velociraptor (swift robber)', 1.8]]);
+        var options = {
+          title: 'Lengths of dinosaurs, in meters',
+          legend: { position: 'none' },
+        };
+        var chart = new google.visualization.Histogram(document.getElementById('detail_chart'));
+        chart.draw(data, options);
+      }
+    </script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(parings.arr);
+        var options = {
+          hAxis: {title: 'Dist SD'},
+          vAxis: {title: 'Dist Ave'},
+          colorAxis: {colors: ['yellow', 'red']},
+          bubble: { textStyle: {fontSize:0.1} }
+        };
+
+        var chart = new google.visualization.BubbleChart(document.getElementById('map_chart'));
+        chart.draw(data, options);
+      }
+    </script>
+    <style type="text/css">
+      <!--
+      div {
+        margin: 0 auto;
+      }
+      .main_div {
+        width: 1800px;
+        height:1000px;
+        background: #eee;
+      }
+      .left_div {
+        width: 1000px;
+        height: 1000px;
+        background: #aaa;
+        float: left;
+        margin: 0 auto;
+      }
+      .right_div {
+        width: 800px;
+        height: 1000px;
+        background: #333;
+        float:left;
+        margin: 0 auto;
+      }
+      .right_container {
+        width: 800px;
+        height: 800px;
+        background: #555;
+        margin: 100 auto;
+      }
+      -->
+    </style>
+  </head>
+  <body>
+    <div class="main_div">
+      <div class="left_div">
+        <div id="map_chart" style="width: 1000px; height: 1000px;"></div>
+      </div>
+      <div class="right_div">
+        <div class="right_container">
+          <div id="detail_chart" style="width: 800px; height: 800px;"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
