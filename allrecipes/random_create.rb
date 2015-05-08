@@ -75,17 +75,21 @@ $dists = []
 ings = ings_preprosess ings
 parings = []
 
-parings.each do |p|
-	puts [p.ings.join(" + "), (p.ave * 100).round.to_s, (p.dist * 100).round.to_s, p.num, p.kind($aves.avg, $dists.avg)].reverse.join(", ")
+1000.times do
+	parings.push pair_example ings, mat, rand(2..10)
 end
 
+parings_js = []
+parings.each do |p|
+	parings_js.push "["+[p.ings.join(" + ").inspect, (p.ave * 100).round.to_s, (p.dist * 100).round.to_s, p.num, p.kind($aves.avg, $dists.avg)].join(", ")+"]"
+end
 
 parings_jsarr = <<EOS
 var parings = new Object();
 parings.arr = [
           ['Pair', 'Dist SD', 'Dist Ave', 'Size', ''],
 EOS
-parings_jsarr += parings.join(",\n")
+parings_jsarr += parings_js.join(",\n")
 parings_jsarr += "];"
 
 puts parings_jsarr
