@@ -13,7 +13,7 @@ def linkval ing1, ing2
 end
 
 db = SQLite3::Database.new "recipe.db"
-ing_lists = db.execute("SELECT ingredients FROM recipes")
+ing_lists = db.execute("SELECT ingredients FROM recipes LIMIT 3")
 # ing_lists = [["butter &&&& bean"],
 #  			["butter &&&& orange"],
 #  			["butter &&&& orange &&&& cream"]]

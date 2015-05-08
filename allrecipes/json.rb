@@ -8,12 +8,12 @@ str.each do |key, val|
 	str[key] = Hash[val.sort]
 end
 
+items = []
 str[str.first.first].each do |k, m|
-	print k
-	print "&&&&"
+	items.push k
 end
 
-puts
+puts items.join("&&&&")
 
 str.each do |e, k|
 	k.each do |c, m|

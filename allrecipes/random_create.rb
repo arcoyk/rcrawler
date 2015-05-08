@@ -51,19 +51,13 @@ def ings_example ings
 	puts
 end
 
-def pair_example ings, mat, n, extra
+def pair_example ings, mat, n
 	samples = ings.sample n
 	indexes = []
 	data = []
-	extra.each do |e|
-		samples.push e
-	end
 	samples.each do |sample|
 		indexes.push(ings.index(sample))
 	end
-	# extra.each do |e|
-	# 	indexes.push(ings.index(e))
-	# end
 	for i in 0..indexes.length-1
 		for j in i+1..indexes.length-1
 			index1 = indexes[i]
@@ -73,7 +67,6 @@ def pair_example ings, mat, n, extra
 	end
 	$aves.push data.avg
 	$dists.push data.sd
-	# return "['" + samples.join(", ") + "', " + data.avg.to_s + ", " + data.sd.to_s + ", " + n.to_s + ", 1]"
 	return Pair.new data.avg, data.sd, samples, n
 end
 
@@ -82,25 +75,17 @@ $dists = []
 ings = ings_preprosess ings
 parings = []
 
-extra = ["bourbon whiskey", "chinese five-spice powder", "fresh red raspberries", "dried rosemary"]
-
-while 1 do
-	ex = pair_example ings, mat, 2, extra
-	puts ex.ings.join(" + ")
+parings.each do |p|
+	puts [p.ings.join(" + "), (p.ave * 100).round.to_s, (p.dist * 100).round.to_s, p.num, p.kind($aves.avg, $dists.avg)].reverse.join(", ")
 end
 
-# parings.each do |p|
-# 	puts [p.ings.join(" + "), (p.ave * 100).round.to_s, (p.dist * 100).round.to_s, p.num, p.kind($aves.avg, $dists.avg)].reverse.join(", ")
-# end
 
+parings_jsarr = <<EOS
+var parings = new Object();
+parings.arr = [
+          ['Pair', 'Dist SD', 'Dist Ave', 'Size', ''],
+EOS
+parings_jsarr += parings.join(",\n")
+parings_jsarr += "];"
 
-
-# parings_jsarr = <<EOS
-# var parings = new Object();
-# parings.arr = [
-#           ['Pair', 'Dist SD', 'Dist Ave', 'Size', ''],
-# EOS
-# parings_jsarr += parings.join(",\n")
-# parings_jsarr += "];"
-
-# puts parings_jsarr
+puts parings_jsarr
